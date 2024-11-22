@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
 import { useToast } from "@/hooks/use-toast"
@@ -8,6 +8,7 @@ import Comment from "./Comment"
 
 const CommentSection = ({ postId }) => {
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const { currentUser } = useSelector((state) => state.user)
   const [comment, setComment] = useState("")
@@ -68,6 +69,37 @@ const CommentSection = ({ postId }) => {
 
     getComments()
   }, [postId])
+
+  const handleLike = async (commentId) => {
+    try {
+      if (!currentUser) {
+        navigate("/sign-in")
+        return
+      }
+
+      const res = await fetch(`/api/comment/likeComment/${commentId}`, {
+        method: "PUT",
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+
+        setAllComments(
+          allComments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  ...comment,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : comment
+          )
+        )
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 
   return (
     <div className="max-w-3xl mx-auto w-full p-3">
@@ -134,7 +166,7 @@ const CommentSection = ({ postId }) => {
           </div>
 
           {allComments.map((comment) => (
-            <Comment key={comment._id} comment={comment} />
+            <Comment key={comment._id} comment={comment} onLike={handleLike} />
           ))}
         </>
       )}
