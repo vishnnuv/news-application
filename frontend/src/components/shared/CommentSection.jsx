@@ -109,6 +109,32 @@ const CommentSection = ({ postId }) => {
     )
   }
 
+  const handleDelete = async (commentId) => {
+    try {
+      // console.log(commentId)
+
+      if (!currentUser) {
+        navigate("/sign-in")
+
+        return
+      }
+
+      const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
+        method: "DELETE",
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+
+        setAllComments(
+          allComments.filter((comment) => comment._id !== commentId)
+        )
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   return (
     <div className="max-w-3xl mx-auto w-full p-3">
       {currentUser ? (
@@ -179,6 +205,7 @@ const CommentSection = ({ postId }) => {
               comment={comment}
               onLike={handleLike}
               onEdit={handleEdit}
+              onDelete={handleDelete}
             />
           ))}
         </>
