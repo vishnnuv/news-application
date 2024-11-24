@@ -4,6 +4,7 @@ import { FaComments, FaSignOutAlt, FaUserAlt, FaUsers } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { IoIosCreate, IoIosDocument } from "react-icons/io"
+import { MdDashboardCustomize } from "react-icons/md"
 
 const DashboardSidebar = () => {
   const dispatch = useDispatch()
@@ -38,6 +39,18 @@ const DashboardSidebar = () => {
       {/* Navigation Links */}
       <nav className="flex-1 p-4">
         <ul className="space-y-2">
+          {currentUser && currentUser.isAdmin && (
+            <li>
+              <Link
+                to={"/dashboard?tab=dashboard"}
+                className="flex items-center p-2 hover:bg-slate-300 rounded"
+              >
+                <MdDashboardCustomize className="mr-3" />
+                <span>Dashboard</span>
+              </Link>
+            </li>
+          )}
+
           <li>
             <Link
               to={"/dashboard?tab=profile"}
