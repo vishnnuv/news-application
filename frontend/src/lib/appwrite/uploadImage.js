@@ -18,15 +18,8 @@ export async function uploadFile(file) {
 
 // Get File Url
 export function getFilePreview(fileId) {
-  try {
-    const fileUrl = storage.getFilePreview(
-      appwriteConfig.storageId,
-      fileId,
-      2000,
-      2000,
-      ImageGravity.Top,
-      100
-    )
+ try {
+    const fileUrl = storage.getFileView(appwriteConfig.storageId, fileId)
 
     if (!fileUrl) throw Error
 

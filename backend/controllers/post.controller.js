@@ -60,9 +60,9 @@ export const getPosts = async (req, res, next) => {
 
     const totalPosts = await Post.countDocuments()
 
-    const now = new Date() // 2024 15 Nov
+    const now = new Date() 
 
-    const oneMonthAgo = new Date( // 2024 15 Oct
+    const oneMonthAgo = new Date( 
       now.getFullYear(),
       now.getMonth() - 1,
       now.getDate()
